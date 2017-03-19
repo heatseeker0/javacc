@@ -36,39 +36,36 @@ import java.util.List;
 
 public class RRepetitionRange extends RegularExpression {
 
-  /**
-   * The regular expression which is repeated one or more times.
-   */
-  public RegularExpression regexpr;
-  public int min = 0;
-  public int max = -1;
-  public boolean hasMax;
+    /**
+     * The regular expression which is repeated one or more times.
+     */
+    public RegularExpression regexpr;
+    public int min = 0;
+    public int max = -1;
+    public boolean hasMax;
 
-  public Nfa GenerateNfa(boolean ignoreCase)
-  {
-     List<? super Object> units = new ArrayList<Object>();
-     RSequence seq;
-     int i;
+    public Nfa GenerateNfa(boolean ignoreCase) {
+        List<? super Object> units = new ArrayList<Object>();
+        RSequence seq;
+        int i;
 
-     for (i = 0; i < min; i++)
-     {
-        units.add(regexpr);
-     }
+        for (i = 0; i < min; i++) {
+            units.add(regexpr);
+        }
 
-     if (hasMax && max == -1) // Unlimited
-     {
-        RZeroOrMore zoo = new RZeroOrMore();
-        zoo.regexpr = regexpr;
-        units.add(zoo);
-     }
+        if (hasMax && max == -1) // Unlimited
+        {
+            RZeroOrMore zoo = new RZeroOrMore();
+            zoo.regexpr = regexpr;
+            units.add(zoo);
+        }
 
-     while (i++ < max)
-     {
-        RZeroOrOne zoo = new RZeroOrOne();
-        zoo.regexpr = regexpr;
-        units.add(zoo);
-     }
-     seq = new RSequence(units);
-     return seq.GenerateNfa(ignoreCase);
-  }
+        while (i++ < max) {
+            RZeroOrOne zoo = new RZeroOrOne();
+            zoo.regexpr = regexpr;
+            units.add(zoo);
+        }
+        seq = new RSequence(units);
+        return seq.GenerateNfa(ignoreCase);
+    }
 }

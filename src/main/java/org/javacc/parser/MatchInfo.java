@@ -31,11 +31,11 @@ package org.javacc.parser;
  * Describes a match, within a given lookahead.
  */
 public class MatchInfo {
-  public static int laLimit;
-  int[] match = new int[laLimit];
-  int firstFreeLoc;
-  public static void reInit()
-  {
-    laLimit = 0;
-  }
+    public static int laLimit;
+    int[] match = new int[laLimit];
+    int firstFreeLoc;
+
+    public static void reInit() {
+        laLimit = 0;
+    }
 }

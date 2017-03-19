@@ -56,8 +56,6 @@ class JJTreeOptions extends Options {
     public static void init() {
         Options.init();
 
-
-        
         Options.optionValues.put("MULTI", Boolean.FALSE);
         Options.optionValues.put("NODE_DEFAULT_VOID", Boolean.FALSE);
         Options.optionValues.put("NODE_SCOPE_HOOK", Boolean.FALSE);
@@ -79,11 +77,10 @@ class JJTreeOptions extends Options {
         Options.optionValues.put("VISITOR_EXCEPTION", "");
 
         Options.optionValues.put("JJTREE_OUTPUT_DIRECTORY", "");
-        
-        
+
         // TODO :: 2013/07/23 -- This appears to be a duplicate from the parent class
         Options.optionValues.put(Options.USEROPTION__JDK_VERSION, "1.5");
-        
+
         // Also appears to be a duplicate
         Options.optionValues.put(Options.USEROPTION__CPP_NAMESPACE, "");
 
@@ -92,22 +89,21 @@ class JJTreeOptions extends Options {
     }
 
     /**
-     *  Check options for consistency
+     * Check options for consistency
      */
     public static void validate() {
-      if (!getVisitor()) {
-        if (getVisitorDataType().length() > 0) {
-          JavaCCErrors.warning("VISITOR_DATA_TYPE option will be ignored since VISITOR is false");
+        if (!getVisitor()) {
+            if (getVisitorDataType().length() > 0) {
+                JavaCCErrors.warning("VISITOR_DATA_TYPE option will be ignored since VISITOR is false");
+            }
+            if (getVisitorReturnType().length() > 0 && !getVisitorReturnType().equals("Object")) {
+                JavaCCErrors.warning("VISITOR_RETURN_TYPE option will be ignored since VISITOR is false");
+            }
+            if (getVisitorException().length() > 0) {
+                JavaCCErrors.warning("VISITOR_EXCEPTION option will be ignored since VISITOR is false");
+            }
         }
-        if (getVisitorReturnType().length() > 0 && !getVisitorReturnType().equals("Object")) {
-          JavaCCErrors.warning("VISITOR_RETURN_TYPE option will be ignored since VISITOR is false");
-        }
-        if (getVisitorException().length() > 0) {
-          JavaCCErrors.warning("VISITOR_EXCEPTION option will be ignored since VISITOR is false");
-        }
-      }
     }
-
 
     /**
      * Find the multi value.

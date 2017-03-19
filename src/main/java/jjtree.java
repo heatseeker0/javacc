@@ -32,10 +32,11 @@
  */
 public final class jjtree {
 
-  private jjtree() {}
+    private jjtree() {
+    }
 
-  public static void main(String[] args) {
-    org.javacc.jjtree.Main.main(args);
-  }
+    public static void main(String[] args) {
+        org.javacc.jjtree.Main.main(args);
+    }
 
 }

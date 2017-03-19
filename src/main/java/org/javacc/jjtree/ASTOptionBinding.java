@@ -27,53 +27,45 @@
  */
 package org.javacc.jjtree;
 
-
 public class ASTOptionBinding extends JJTreeNode {
-  ASTOptionBinding(int id) {
-    super(id);
-  }
-
-  private boolean suppressed = false;
-  private String name;
-
-  void initialize(String n, String v)
-  {
-    name = n;
-
-    // If an option is specific to JJTree it should not be written out
-    // to the output file for JavaCC.
-
-    if (JJTreeGlobals.isOptionJJTreeOnly(name)) {
-      suppressed = true;
+    ASTOptionBinding(int id) {
+        super(id);
     }
-  }
 
+    private boolean suppressed = false;
+    private String name;
 
-  boolean isSuppressed()
-  {
-    return suppressed;
-  }
+    void initialize(String n, String v) {
+        name = n;
 
-  void suppressOption(boolean s)
-  {
-    suppressed = s;
-  }
+        // If an option is specific to JJTree it should not be written out
+        // to the output file for JavaCC.
 
-
-  String translateImage(Token t)
-  {
-    if (suppressed) {
-      return whiteOut(t);
-    } else {
-      return t.image;
+        if (JJTreeGlobals.isOptionJJTreeOnly(name)) {
+            suppressed = true;
+        }
     }
-  }
 
-  /** Accept the visitor. **/
-  public Object jjtAccept(JJTreeParserVisitor visitor, Object data) {
-    return visitor.visit(this, data);
-  }
+    boolean isSuppressed() {
+        return suppressed;
+    }
+
+    void suppressOption(boolean s) {
+        suppressed = s;
+    }
+
+    String translateImage(Token t) {
+        if (suppressed) {
+            return whiteOut(t);
+        } else {
+            return t.image;
+        }
+    }
+
+    /** Accept the visitor. **/
+    public Object jjtAccept(JJTreeParserVisitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
 }
 
-
-/*end*/
+/* end */

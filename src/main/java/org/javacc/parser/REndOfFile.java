@@ -33,8 +33,7 @@ package org.javacc.parser;
 
 public class REndOfFile extends RegularExpression {
 
-  public Nfa GenerateNfa(boolean ignoreCase)
-  {
-     return null;
-  }
+    public Nfa GenerateNfa(boolean ignoreCase) {
+        return null;
+    }
 }

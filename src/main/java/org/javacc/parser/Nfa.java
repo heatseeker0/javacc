@@ -30,20 +30,17 @@ package org.javacc.parser;
 /**
  * A Non-deterministic Finite Automaton.
  */
-public class Nfa
-{
-   NfaState start;
-   NfaState end;
+public class Nfa {
+    NfaState start;
+    NfaState end;
 
-   public Nfa()
-   {
-      start = new NfaState();
-      end = new NfaState();
-   }
+    public Nfa() {
+        start = new NfaState();
+        end = new NfaState();
+    }
 
-   public Nfa(NfaState startGiven, NfaState finalGiven)
-   {
-      start = startGiven;
-      end = finalGiven;
-   }
+    public Nfa(NfaState startGiven, NfaState finalGiven) {
+        start = startGiven;
+        end = finalGiven;
+    }
 }

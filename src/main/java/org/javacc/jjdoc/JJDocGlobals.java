@@ -35,86 +35,88 @@ import org.javacc.parser.JavaCCGlobals;
  *
  */
 public class JJDocGlobals extends JavaCCGlobals {
-  /**
-   * The name of the input file.
-   */
-  public static String input_file;
-  /**
-   * The name of the output file.
-   */
-  public static String output_file;
+    /**
+     * The name of the input file.
+     */
+    public static String input_file;
+    /**
+     * The name of the output file.
+     */
+    public static String output_file;
 
-  /**
-   * The Generator to create output with.
-   */
-  public static Generator generator;
+    /**
+     * The Generator to create output with.
+     */
+    public static Generator generator;
 
-  /**
-   * @param generator
-   *        The generator to set.
-   */
-  public static void setGenerator(Generator generator) {
-    JJDocGlobals.generator = generator;
-  }
-
-  /**
-   * The commandline option is either TEXT or not, but the generator might
-   * have been set to some other Generator using the setGenerator method.
-   *
-   * @return the generator configured in options or set by setter.
-   */
-  public static Generator getGenerator() {
-    if (generator == null) {
-      if (JJDocOptions.getText()) {
-        generator = new TextGenerator();
-      } else if (JJDocOptions.getBNF()) {
-	    generator = new BNFGenerator();
-	  } else if (JJDocOptions.getXText()){
-	      generator = new XTextGenerator();
-	  } else {
-        generator = new HTMLGenerator();
-      }
-    } else {
-      if (JJDocOptions.getText()) {
-        if(generator instanceof HTMLGenerator) {
-          generator = new TextGenerator();
-        }
-      } else if (JJDocOptions.getBNF()) {
-		generator = new BNFGenerator();
-      } else if (JJDocOptions.getXText()){
-          generator = new XTextGenerator();
-	  } else {
-        if(generator instanceof TextGenerator) {
-          generator = new HTMLGenerator();
-        }
-      } 
+    /**
+     * @param generator
+     *            The generator to set.
+     */
+    public static void setGenerator(Generator generator) {
+        JJDocGlobals.generator = generator;
     }
-    return generator;
-  }
 
-  /**
-   * Log informational messages.
-   * @param message the message to log
-   */
-  public static void debug(String message) {
-    getGenerator().debug(message);
-  }
+    /**
+     * The commandline option is either TEXT or not, but the generator might
+     * have been set to some other Generator using the setGenerator method.
+     *
+     * @return the generator configured in options or set by setter.
+     */
+    public static Generator getGenerator() {
+        if (generator == null) {
+            if (JJDocOptions.getText()) {
+                generator = new TextGenerator();
+            } else if (JJDocOptions.getBNF()) {
+                generator = new BNFGenerator();
+            } else if (JJDocOptions.getXText()) {
+                generator = new XTextGenerator();
+            } else {
+                generator = new HTMLGenerator();
+            }
+        } else {
+            if (JJDocOptions.getText()) {
+                if (generator instanceof HTMLGenerator) {
+                    generator = new TextGenerator();
+                }
+            } else if (JJDocOptions.getBNF()) {
+                generator = new BNFGenerator();
+            } else if (JJDocOptions.getXText()) {
+                generator = new XTextGenerator();
+            } else {
+                if (generator instanceof TextGenerator) {
+                    generator = new HTMLGenerator();
+                }
+            }
+        }
+        return generator;
+    }
 
-  /**
-   * Log informational messages.
-   * @param message the message to log
-   */
-  public static void info(String message) {
-    getGenerator().info(message);
-  }
+    /**
+     * Log informational messages.
+     * 
+     * @param message the message to log
+     */
+    public static void debug(String message) {
+        getGenerator().debug(message);
+    }
 
-  /**
-   * Log error messages.
-   * @param message the message to log
-   */
-  public static void error(String message) {
-    getGenerator().error(message);
-  }
+    /**
+     * Log informational messages.
+     * 
+     * @param message the message to log
+     */
+    public static void info(String message) {
+        getGenerator().info(message);
+    }
 
+    /**
+     * Log error messages.
+     * 
+     * @param message the message to log
+     */
+    public static void error(String message) {
+        getGenerator().error(message);
+    }
 
 }

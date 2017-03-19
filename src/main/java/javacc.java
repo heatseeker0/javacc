@@ -31,9 +31,10 @@
  * independent.
  */
 public final class javacc {
-  private javacc() {}
-  public static void main(String[] args) throws Exception {
-    org.javacc.parser.Main.main(args);
-  }
+    private javacc() {
+    }
 
+    public static void main(String[] args) throws Exception {
+        org.javacc.parser.Main.main(args);
+    }
 }

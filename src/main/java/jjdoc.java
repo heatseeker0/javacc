@@ -32,10 +32,11 @@
  */
 public final class jjdoc {
 
-  private jjdoc() {}
+    private jjdoc() {
+    }
 
-  public static void main(String[] args) throws Exception {
-    org.javacc.jjdoc.JJDocMain.main(args);
-  }
+    public static void main(String[] args) throws Exception {
+        org.javacc.jjdoc.JJDocMain.main(args);
+    }
 
 }

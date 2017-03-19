@@ -30,34 +30,30 @@ package org.javacc.jjtree;
 import java.util.Hashtable;
 import java.util.Vector;
 
-
-public class ASTProduction extends JJTreeNode
-{
-  ASTProduction(int id) {
-    super(id);
-  }
-
-  String name;
-  Vector throws_list = new Vector();
-
-  private Hashtable scopes = new Hashtable();
-  private int nextNodeScopeNumber = 0;
-
-
-  int getNodeScopeNumber(NodeScope s)
-  {
-    Integer i = (Integer)scopes.get(s);
-    if (i == null) {
-      i = new Integer(nextNodeScopeNumber++);
-      scopes.put(s, i);
+public class ASTProduction extends JJTreeNode {
+    ASTProduction(int id) {
+        super(id);
     }
-    return i.intValue();
-  }
 
-  /** Accept the visitor. **/
-  public Object jjtAccept(JJTreeParserVisitor visitor, Object data) {
-    return visitor.visit(this, data);
-  }
+    String name;
+    Vector throws_list = new Vector();
+
+    private Hashtable scopes = new Hashtable();
+    private int nextNodeScopeNumber = 0;
+
+    int getNodeScopeNumber(NodeScope s) {
+        Integer i = (Integer) scopes.get(s);
+        if (i == null) {
+            i = new Integer(nextNodeScopeNumber++);
+            scopes.put(s, i);
+        }
+        return i.intValue();
+    }
+
+    /** Accept the visitor. **/
+    public Object jjtAccept(JJTreeParserVisitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
 }
 
-/*end*/
+/* end */

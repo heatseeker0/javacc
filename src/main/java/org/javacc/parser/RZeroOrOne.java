@@ -33,24 +33,23 @@ package org.javacc.parser;
 
 public class RZeroOrOne extends RegularExpression {
 
-  /**
-   * The regular expression which is repeated zero or one times.
-   */
-  public RegularExpression regexpr;
+    /**
+     * The regular expression which is repeated zero or one times.
+     */
+    public RegularExpression regexpr;
 
-  public Nfa GenerateNfa(boolean ignoreCase)
-  {
-     Nfa retVal = new Nfa();
-     NfaState startState = retVal.start;
-     NfaState finalState = retVal.end;
+    public Nfa GenerateNfa(boolean ignoreCase) {
+        Nfa retVal = new Nfa();
+        NfaState startState = retVal.start;
+        NfaState finalState = retVal.end;
 
-     Nfa temp = regexpr.GenerateNfa(ignoreCase);
+        Nfa temp = regexpr.GenerateNfa(ignoreCase);
 
-     startState.AddMove(temp.start);
-     startState.AddMove(finalState);
-     temp.end.AddMove(finalState);
+        startState.AddMove(temp.start);
+        startState.AddMove(finalState);
+        temp.end.AddMove(finalState);
 
-     return retVal;
-  }
+        return retVal;
+    }
 
 }

@@ -33,8 +33,8 @@ package org.javacc.parser;
  */
 public class MetaParseException extends ParseException {
 
-	/**
+    /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 }

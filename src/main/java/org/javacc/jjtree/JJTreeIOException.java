@@ -32,10 +32,9 @@ package org.javacc.jjtree;
  */
 class JJTreeIOException extends java.io.IOException {
 
-  JJTreeIOException(String detail)
-  {
-    super(detail);
-  }
+    JJTreeIOException(String detail) {
+        super(detail);
+    }
 }
 
-/*end*/
+/* end */

@@ -38,26 +38,25 @@ import java.util.Set;
 
 public class Action extends Expansion {
 
-  /**
-   * Contains the list of tokens that make up the action.  This
-   * list does not include the surrounding braces.
-   */
-  private List<Token> action_tokens = new ArrayList<Token>();
+    /**
+     * Contains the list of tokens that make up the action. This
+     * list does not include the surrounding braces.
+     */
+    private List<Token> action_tokens = new ArrayList<Token>();
 
-  public StringBuffer dump(int indent, Set alreadyDumped) {
-    StringBuffer sb = super.dump(indent, alreadyDumped);
-    alreadyDumped.add(this);
-    if (getActionTokens().size() > 0)
-    {
-      sb.append(' ').append(getActionTokens().get(0));
+    public StringBuffer dump(int indent, Set alreadyDumped) {
+        StringBuffer sb = super.dump(indent, alreadyDumped);
+        alreadyDumped.add(this);
+        if (getActionTokens().size() > 0) {
+            sb.append(' ').append(getActionTokens().get(0));
+        }
+        return sb;
     }
-    return sb;
-  }
 
-  /**
-   * @return the action_tokens
-   */
-  public List<Token> getActionTokens() {
-    return action_tokens;
-  }
+    /**
+     * @return the action_tokens
+     */
+    public List<Token> getActionTokens() {
+        return action_tokens;
+    }
 }

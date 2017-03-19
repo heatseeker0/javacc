@@ -1,6 +1,5 @@
 package org.javacc.utils;
 
-
 /**
  * 
  * 
@@ -8,7 +7,7 @@ package org.javacc.utils;
  *
  */
 public enum OptionType {
-	  BOOLEAN,
-	  INTEGER,
-	  STRING; 
+    BOOLEAN,
+    INTEGER,
+    STRING;
 }

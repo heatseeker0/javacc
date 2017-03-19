@@ -32,14 +32,14 @@ package org.javacc.jjtree;
  */
 public final class Main {
 
-  private Main() {}
+    private Main() {
+    }
 
-  public static void main(String args[])
-  {
-    JJTree jjtree = new JJTree();
-    int result = jjtree.main(args);
-    System.exit(result);
-  }
+    public static void main(String args[]) {
+        JJTree jjtree = new JJTree();
+        int result = jjtree.main(args);
+        System.exit(result);
+    }
 }
 
-/*end*/
+/* end */

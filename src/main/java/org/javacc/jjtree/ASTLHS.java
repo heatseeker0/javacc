@@ -27,16 +27,15 @@
  */
 package org.javacc.jjtree;
 
-
 public class ASTLHS extends JJTreeNode {
-  ASTLHS(int id) {
-    super(id);
-  }
+    ASTLHS(int id) {
+        super(id);
+    }
 
-  /** Accept the visitor. **/
-  public Object jjtAccept(JJTreeParserVisitor visitor, Object data) {
-    return visitor.visit(this, data);
-  }
+    /** Accept the visitor. **/
+    public Object jjtAccept(JJTreeParserVisitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
 }
 
-/*end*/
+/* end */

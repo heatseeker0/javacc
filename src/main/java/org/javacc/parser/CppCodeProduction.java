@@ -27,7 +27,6 @@
  */
 package org.javacc.parser;
 
-
 /**
  * Describes CPPCODE productions.
  */

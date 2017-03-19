@@ -36,12 +36,13 @@ import java.util.Set;
 
 public class ZeroOrMore extends Expansion {
 
-  /**
-   * The expansion which is repeated zero or more times.
-   */
-  public Expansion expansion;
+    /**
+     * The expansion which is repeated zero or more times.
+     */
+    public Expansion expansion;
 
-    public ZeroOrMore() {}
+    public ZeroOrMore() {
+    }
 
     public ZeroOrMore(Token token, Expansion expansion) {
         this.setLine(token.beginLine);
@@ -51,11 +52,11 @@ public class ZeroOrMore extends Expansion {
     }
 
     public StringBuffer dump(int indent, Set<? super Expansion> alreadyDumped) {
-      StringBuffer sb = super.dump(indent, alreadyDumped);
-      if (alreadyDumped.contains(this))
+        StringBuffer sb = super.dump(indent, alreadyDumped);
+        if (alreadyDumped.contains(this))
+            return sb;
+        alreadyDumped.add(this);
+        sb.append(eol).append(expansion.dump(indent + 1, alreadyDumped));
         return sb;
-      alreadyDumped.add(this);
-      sb.append(eol).append(expansion.dump(indent + 1, alreadyDumped));
-      return sb;
     }
 }

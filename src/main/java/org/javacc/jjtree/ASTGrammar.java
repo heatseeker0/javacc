@@ -34,30 +34,29 @@ package org.javacc.jjtree;
 import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.Options;
 
-
 public class ASTGrammar extends JJTreeNode {
-  ASTGrammar(int id) {
-    super(id);
-  }
-
-  void generate(IO io) {
-     System.out.println("opt:" + JJTreeOptions.getOutputLanguage());
-    // TODO :: CBA --  Require Unification of output language specific processing into a single Enum class
-    if (JJTreeOptions.isOutputLanguageJava()) {
-      new JavaCodeGenerator().visit(this, io);
-    } else if (JJTreeOptions.getOutputLanguage().equals(Options.OUTPUT_LANGUAGE__CPP)) {
-      new CPPCodeGenerator().visit(this, io);
-      CPPNodeFiles.generateTreeClasses();
-    } else {
-    	// Catch all to ensure we don't accidently do nothing
-    	throw new RuntimeException("Language type not supported for JJTree : " + JJTreeOptions.getOutputLanguage());
+    ASTGrammar(int id) {
+        super(id);
     }
-  }
 
-  /** Accept the visitor. **/
-  public Object jjtAccept(JJTreeParserVisitor visitor, Object data) {
-    return visitor.visit(this, data);
-  }
+    void generate(IO io) {
+        System.out.println("opt:" + JJTreeOptions.getOutputLanguage());
+        // TODO :: CBA -- Require Unification of output language specific processing into a single Enum class
+        if (JJTreeOptions.isOutputLanguageJava()) {
+            new JavaCodeGenerator().visit(this, io);
+        } else if (JJTreeOptions.getOutputLanguage().equals(Options.OUTPUT_LANGUAGE__CPP)) {
+            new CPPCodeGenerator().visit(this, io);
+            CPPNodeFiles.generateTreeClasses();
+        } else {
+            // Catch all to ensure we don't accidently do nothing
+            throw new RuntimeException("Language type not supported for JJTree : " + JJTreeOptions.getOutputLanguage());
+        }
+    }
+
+    /** Accept the visitor. **/
+    public Object jjtAccept(JJTreeParserVisitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
 }
 
-/*end*/
+/* end */
