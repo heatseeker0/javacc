@@ -44,7 +44,7 @@ public class Choice extends Expansion {
      * The list of choices of this expansion unit. Each
      * List component will narrow to ExpansionUnit.
      */
-    private List<? super Object> choices = new ArrayList<>();
+    private List<Object> choices = new ArrayList<>();
 
     public Choice() {
     }
@@ -63,14 +63,14 @@ public class Choice extends Expansion {
     /**
      * @param choices the choices to set
      */
-    public void setChoices(List<? super Object> choices) {
+    public void setChoices(List<Object> choices) {
         this.choices = choices;
     }
 
     /**
      * @return the choices
      */
-    public List<? super Object> getChoices() {
+    public List<Object> getChoices() {
         return choices;
     }
 

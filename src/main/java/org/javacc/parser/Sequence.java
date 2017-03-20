@@ -44,7 +44,7 @@ public class Sequence extends Expansion {
      * The list of units in this expansion sequence. Each
      * List component will narrow to Expansion.
      */
-    public List<? super Object> units = new ArrayList<>();
+    public List<Object> units = new ArrayList<>();
 
     public Sequence() {
     }
@@ -63,7 +63,7 @@ public class Sequence extends Expansion {
 
         alreadyDumped.add(this);
         final StringBuffer sb = super.dump(indent, alreadyDumped);
-        for (Iterator<? super Object> it = units.iterator(); it.hasNext();) {
+        for (Iterator<Object> it = units.iterator(); it.hasNext();) {
             Expansion next = (Expansion) it.next();
             sb.append(eol).append(next.dump(indent + 1, alreadyDumped));
         }
