@@ -51,7 +51,9 @@ public class CPPFiles extends JavaCCGlobals implements JavaCCParserConstants {
         StringBuffer b;
         int i = 0, len = str.length();
 
-        while (i < len && str.charAt(i++) != '\\');
+        while (i < len && str.charAt(i++) != '\\') {
+            //
+        }
 
         if (i == len) // No backslash found.
             return str;
@@ -91,9 +93,7 @@ public class CPPFiles extends JavaCCGlobals implements JavaCCParserConstants {
             }
         }
 
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new FileReader(file));
+        try (BufferedReader reader = new BufferedReader(new FileReader(file));) {
             String str;
             double version = 0.0;
 
@@ -120,13 +120,6 @@ public class CPPFiles extends JavaCCGlobals implements JavaCCParserConstants {
             return version;
         } catch (IOException ioe) {
             return 0.0;
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                }
-            }
         }
     }
 
@@ -139,10 +132,10 @@ public class CPPFiles extends JavaCCGlobals implements JavaCCParserConstants {
                 return;
             }
 
-            final PrintWriter ostr = outputFile.getPrintWriter();
-            OutputFileGenerator generator = new OutputFileGenerator("/templates/cpp/" + name + ".template", Options.getOptions());
-            generator.generate(ostr);
-            ostr.close();
+            try (final PrintWriter ostr = outputFile.getPrintWriter()) {
+                OutputFileGenerator generator = new OutputFileGenerator("/templates/cpp/" + name + ".template", Options.getOptions());
+                generator.generate(ostr);
+            }
         } catch (IOException e) {
             System.err.println("Failed to create file: " + file + e);
             JavaCCErrors.semantic_error("Could not open file: " + file + " for writing.");
@@ -190,6 +183,7 @@ public class CPPFiles extends JavaCCGlobals implements JavaCCParserConstants {
     }
 
     public static void reInit() {
+        //
     }
 
 }

@@ -75,9 +75,8 @@ public final class TokenUtils {
     static boolean hasTokens(JJTreeNode n) {
         if (n.getLastToken().next == n.getFirstToken()) {
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
 
     static String remove_escapes_and_quotes(Token t, String str) {
@@ -134,15 +133,15 @@ public final class TokenUtils {
                 continue;
             }
             if (ch >= '0' && ch <= '7') {
-                ordinal = ((int) ch) - ((int) '0');
+                ordinal = ch - '0';
                 index++;
                 ch1 = str.charAt(index);
                 if (ch1 >= '0' && ch1 <= '7') {
-                    ordinal = ordinal * 8 + ((int) ch1) - ((int) '0');
+                    ordinal = ordinal * 8 + ch1 - '0';
                     index++;
                     ch1 = str.charAt(index);
                     if (ch <= '3' && ch1 >= '0' && ch1 <= '7') {
-                        ordinal = ordinal * 8 + ((int) ch1) - ((int) '0');
+                        ordinal = ordinal * 8 + ch1 - '0';
                         index++;
                     }
                 }
@@ -193,10 +192,10 @@ public final class TokenUtils {
 
     private static int hexval(char ch) {
         if (ch >= '0' && ch <= '9')
-            return ((int) ch) - ((int) '0');
+            return ch - '0';
         if (ch >= 'A' && ch <= 'F')
-            return ((int) ch) - ((int) 'A') + 10;
-        return ((int) ch) - ((int) 'a') + 10;
+            return ch - 'A' + 10;
+        return ch - 'a' + 10;
     }
 
 }

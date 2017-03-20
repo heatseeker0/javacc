@@ -113,11 +113,11 @@ public class JJDoc extends JJDocGlobals {
      * }
      */
 
-    private static void emitTokenProductions(Generator gen, List prods) {
+    private static void emitTokenProductions(Generator gen, List<TokenProduction> prods) {
         gen.tokensStart();
         // FIXME there are many empty productions here
-        for (Iterator it = prods.iterator(); it.hasNext();) {
-            TokenProduction tp = (TokenProduction) it.next();
+        for (Iterator<TokenProduction> it = prods.iterator(); it.hasNext();) {
+            TokenProduction tp = it.next();
             emitTopLevelSpecialTokens(tp.firstToken, gen);
 
             gen.handleTokenProduction(tp);
@@ -152,8 +152,8 @@ public class JJDoc extends JJDocGlobals {
                 token += " [IGNORE_CASE]";
             }
             token += " : {\n";
-            for (Iterator it2 = tp.respecs.iterator(); it2.hasNext();) {
-                RegExprSpec res = (RegExprSpec) it2.next();
+            for (Iterator<RegExprSpec> it2 = tp.respecs.iterator(); it2.hasNext();) {
+                RegExprSpec res = it2.next();
 
                 token += emitRE(res.rexp);
 
@@ -171,17 +171,17 @@ public class JJDoc extends JJDocGlobals {
         return token;
     }
 
-    private static void emitNormalProductions(Generator gen, List prods) {
+    private static void emitNormalProductions(Generator gen, List<NormalProduction> prods) {
         gen.nonterminalsStart();
-        for (Iterator it = prods.iterator(); it.hasNext();) {
-            NormalProduction np = (NormalProduction) it.next();
+        for (Iterator<NormalProduction> it = prods.iterator(); it.hasNext();) {
+            NormalProduction np = it.next();
             emitTopLevelSpecialTokens(np.getFirstToken(), gen);
             if (np instanceof BNFProduction) {
                 gen.productionStart(np);
                 if (np.getExpansion() instanceof Choice) {
                     boolean first = true;
                     Choice c = (Choice) np.getExpansion();
-                    for (Iterator expansionsIterator = c.getChoices().iterator(); expansionsIterator.hasNext();) {
+                    for (Iterator<? super Object> expansionsIterator = c.getChoices().iterator(); expansionsIterator.hasNext();) {
                         Expansion e = (Expansion) (expansionsIterator.next());
                         gen.expansionStart(e, first);
                         emitExpansionTree(e, gen);
@@ -231,11 +231,13 @@ public class JJDoc extends JJDocGlobals {
         // gen.text("[<-" + exp.getClass().getName() + "]");
     }
 
+    @SuppressWarnings("unused")
     private static void emitExpansionAction(Action a, Generator gen) {
+        //
     }
 
     private static void emitExpansionChoice(Choice c, Generator gen) {
-        for (Iterator it = c.getChoices().iterator(); it.hasNext();) {
+        for (Iterator<? super Object> it = c.getChoices().iterator(); it.hasNext();) {
             Expansion e = (Expansion) (it.next());
             emitExpansionTree(e, gen);
             if (it.hasNext()) {
@@ -244,7 +246,9 @@ public class JJDoc extends JJDocGlobals {
         }
     }
 
+    @SuppressWarnings("unused")
     private static void emitExpansionLookahead(Lookahead l, Generator gen) {
+        //
     }
 
     private static void emitExpansionNonTerminal(NonTerminal nt, Generator gen) {
@@ -270,7 +274,7 @@ public class JJDoc extends JJDocGlobals {
 
     private static void emitExpansionSequence(Sequence s, Generator gen) {
         boolean firstUnit = true;
-        for (Iterator it = s.units.iterator(); it.hasNext();) {
+        for (Iterator<? super Object> it = s.units.iterator(); it.hasNext();) {
             Expansion e = (Expansion) it.next();
             if (e instanceof Lookahead || e instanceof Action) {
                 continue;
@@ -339,7 +343,7 @@ public class JJDoc extends JJDocGlobals {
                 returnString += "~";
             }
             returnString += "[";
-            for (Iterator it = cl.descriptors.iterator(); it.hasNext();) {
+            for (Iterator<Object> it = cl.descriptors.iterator(); it.hasNext();) {
                 Object o = it.next();
                 if (o instanceof SingleCharacter) {
                     returnString += "\"";
@@ -364,7 +368,7 @@ public class JJDoc extends JJDocGlobals {
             returnString += "]";
         } else if (re instanceof RChoice) {
             RChoice c = (RChoice) re;
-            for (Iterator it = c.getChoices().iterator(); it.hasNext();) {
+            for (Iterator<Object> it = c.getChoices().iterator(); it.hasNext();) {
                 RegularExpression sub = (RegularExpression) (it.next());
                 returnString += emitRE(sub);
                 if (it.hasNext()) {
@@ -383,7 +387,7 @@ public class JJDoc extends JJDocGlobals {
             returnString += ")+";
         } else if (re instanceof RSequence) {
             RSequence s = (RSequence) re;
-            for (Iterator it = s.units.iterator(); it.hasNext();) {
+            for (Iterator<? super Object> it = s.units.iterator(); it.hasNext();) {
                 RegularExpression sub = (RegularExpression) (it.next());
                 boolean needParens = false;
                 if (sub instanceof RChoice) {

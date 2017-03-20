@@ -30,7 +30,6 @@
  */
 package org.javacc.parser;
 
-import java.util.List;
 import java.util.Set;
 
 import org.javacc.utils.OptionInfo;
@@ -134,17 +133,16 @@ public class Main {
         int nameLength = name.length();
         if (nameLength == maxLengthInt) {
             return name;
-        } else {
-            int charsToPad = maxLengthInt - nameLength;
-            StringBuilder sb = new StringBuilder(charsToPad);
-            sb.append(name);
-
-            for (int i = 0; i < charsToPad; i++) {
-                sb.append(" ");
-            }
-
-            return sb.toString();
         }
+        int charsToPad = maxLengthInt - nameLength;
+        StringBuilder sb = new StringBuilder(charsToPad);
+        sb.append(name);
+
+        for (int i = 0; i < charsToPad; i++) {
+            sb.append(" ");
+        }
+
+        return sb.toString();
     }
 
     /**
@@ -172,9 +170,8 @@ public class Main {
             System.out.println("");
             help_message();
             return 1;
-        } else {
-            System.out.println("(type \"javacc\" with no arguments for help)");
         }
+        System.out.println("(type \"javacc\" with no arguments for help)");
 
         if (Options.isOption(args[args.length - 1])) {
             System.out.println("Last argument \"" + args[args.length - 1] + "\" is not a filename.");
@@ -278,10 +275,9 @@ public class Main {
                     System.out.println("Parser generated with 0 errors and " + JavaCCErrors.get_warning_count() + " warnings.");
                 }
                 return 0;
-            } else {
-                System.out.println("Detected " + JavaCCErrors.get_error_count() + " errors and " + JavaCCErrors.get_warning_count() + " warnings.");
-                return (JavaCCErrors.get_error_count() == 0) ? 0 : 1;
             }
+            System.out.println("Detected " + JavaCCErrors.get_error_count() + " errors and " + JavaCCErrors.get_warning_count() + " warnings.");
+            return (JavaCCErrors.get_error_count() == 0) ? 0 : 1;
         } catch (MetaParseException e) {
             System.out.println("Detected " + JavaCCErrors.get_error_count() + " errors and " + JavaCCErrors.get_warning_count() + " warnings.");
             return 1;

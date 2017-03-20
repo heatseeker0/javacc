@@ -25,7 +25,16 @@
 
 package org.javacc.utils;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,13 +54,13 @@ public class OutputFileGenerator {
      * @param options the processing options in force, such
      *            as "STATIC=yes"
      */
-    public OutputFileGenerator(String templateName, Map options) {
+    public OutputFileGenerator(String templateName, Map<String, Object> options) {
         this.templateName = templateName;
         this.options = options;
     }
 
     private final String templateName;
-    private final Map options;
+    private final Map<String, Object> options;
 
     private String currentLine;
 
@@ -65,8 +74,9 @@ public class OutputFileGenerator {
         InputStream is = getClass().getResourceAsStream(templateName);
         if (is == null)
             throw new IOException("Invalid template name: " + templateName);
-        BufferedReader in = new BufferedReader(new InputStreamReader(is));
-        process(in, out, false);
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(is))) {
+            process(in, out, false);
+        }
     }
 
     private String peekLine(BufferedReader in) throws IOException {
@@ -160,8 +170,7 @@ public class OutputFileGenerator {
 
         if (evaluate(variableName))
             return substitute(values.substring(0, pos));
-        else
-            return substitute(values.substring(pos + 1));
+        return substitute(values.substring(pos + 1));
     }
 
     /**
@@ -238,29 +247,22 @@ public class OutputFileGenerator {
     }
 
     public static void main(String[] args) throws Exception {
-        Map map = new HashMap();
+        Map<String, Object> map = new HashMap<>();
         map.put("falseArg", Boolean.FALSE);
         map.put("trueArg", Boolean.TRUE);
         map.put("stringValue", "someString");
 
-        new OutputFileGenerator(args[0], map).generate(new PrintWriter(args[1]));
+        try (PrintWriter fw = new PrintWriter(args[1])) {
+            new OutputFileGenerator(args[0], map).generate(fw);
+        }
     }
 
     public static void generateFromTemplate(String template, Map<String, Object> options, String outputFileName) throws IOException {
         OutputFileGenerator gen = new OutputFileGenerator(template, options);
-        StringWriter sw = new StringWriter();
-        gen.generate(new PrintWriter(sw));
-        sw.close();
-        PrintWriter fw = null;
-        try {
-            File tmp = new File(outputFileName);
-            fw = new PrintWriter(new BufferedWriter(new FileWriter(tmp), 8092));
-
+        File tmp = new File(outputFileName);
+        try (StringWriter sw = new StringWriter(); PrintWriter fw = new PrintWriter(new BufferedWriter(new FileWriter(tmp), 8092))) {
+            gen.generate(new PrintWriter(sw));
             fw.print(sw.toString());
-        } finally {
-            if (fw != null) {
-                fw.close();
-            }
         }
     }
 }

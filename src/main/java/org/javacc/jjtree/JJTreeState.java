@@ -32,7 +32,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import org.javacc.parser.Options;
 import org.javacc.parser.OutputFile;
 
 /**
@@ -66,9 +65,10 @@ final class JJTreeState {
 
         try {
             OutputFile outputFile = new OutputFile(file);
-            PrintWriter ostr = outputFile.getPrintWriter();
-            NodeFiles.generatePrologue(ostr);
-            insertState(ostr);
+            try (PrintWriter ostr = outputFile.getPrintWriter()) {
+                NodeFiles.generatePrologue(ostr);
+                insertState(ostr);
+            }
             outputFile.close();
         } catch (IOException e) {
             throw new Error(e.toString());

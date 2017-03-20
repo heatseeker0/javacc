@@ -44,18 +44,11 @@ public abstract class RegularExpression extends Expansion {
     public String label = "";
 
     /**
-     * The ordinal value assigned to the regular expression. It is
-     * used for internal processing and passing information between
-     * the parser and the lexical analyzer.
-     */
-    int ordinal;
-
-    /**
      * The LHS to which the token value of the regular expression
      * is assigned. In case there is no LHS, then the list
      * remains empty.
      */
-    public List<Token> lhsTokens = new ArrayList<Token>();
+    public List<Token> lhsTokens = new ArrayList<>();
 
     /**
      * We now allow qualified access to token members. Store it here.
@@ -92,6 +85,7 @@ public abstract class RegularExpression extends Expansion {
      */
     int walkStatus = 0;
 
+    @Override
     public StringBuffer dump(int indent, Set<? super Expansion> alreadyDumped) {
         StringBuffer sb = super.dump(indent, alreadyDumped);
         alreadyDumped.add(this);

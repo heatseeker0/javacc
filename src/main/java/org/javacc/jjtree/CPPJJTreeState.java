@@ -5,8 +5,6 @@ package org.javacc.jjtree;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.javacc.Version;
@@ -24,7 +22,7 @@ final class CPPJJTreeState {
     }
 
     static void generateTreeState() throws IOException {
-        Map options = JJTreeOptions.getOptions();
+        Map<String, Object> options = JJTreeOptions.getOptions();
         options.put(Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
         String filePrefix = new File(JJTreeOptions.getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State").getAbsolutePath();
 

@@ -46,7 +46,7 @@ public class RCharacterList extends RegularExpression {
      * This is the list of descriptors of the character list. Each list
      * entry will narrow to either SingleCharacter or to CharacterRange.
      */
-    public List descriptors = new ArrayList();
+    public List<Object> descriptors = new ArrayList<>();
 
     static final char[] diffLowerCaseRanges = { 65, 90, 192, 214, 216, 222, 256, 256, 258, 258, 260, 260, 262, 262, 264, 264, 266, 266, 268, 268, 270, 270, 272, 272, 274, 274, 276, 276, 278, 278, 280, 280,
             282, 282, 284, 284, 286, 286, 288, 288, 290, 290, 292, 292, 294, 294, 296, 296, 298, 298, 300, 300, 302, 302, /* new for fixing 1.0.2 */304, 304, /*
@@ -194,6 +194,7 @@ public class RCharacterList extends RegularExpression {
 
     boolean transformed = false;
 
+    @Override
     public Nfa GenerateNfa(boolean ignoreCase) {
         if (!transformed) {
             if (Options.getIgnoreCase() || ignoreCase) {
@@ -297,7 +298,7 @@ public class RCharacterList extends RegularExpression {
     void SortDescriptors() {
         int j;
 
-        List newDesc = new ArrayList(descriptors.size());
+        List<Object> newDesc = new ArrayList<>(descriptors.size());
         int cnt = 0;
 
         Outer:
@@ -387,7 +388,7 @@ public class RCharacterList extends RegularExpression {
          * System.out.println("");
          */
 
-        List newDescriptors = new ArrayList();
+        List<Object> newDescriptors = new ArrayList<>();
         int lastRemoved = -1; // One less than the first valid character.
 
         for (i = 0; i < descriptors.size(); i++) {
@@ -453,12 +454,13 @@ public class RCharacterList extends RegularExpression {
     }
 
     RCharacterList(char c) {
-        descriptors = new ArrayList();
+        descriptors = new ArrayList<>();
         descriptors.add(new SingleCharacter(c));
         negated_list = false;
         ordinal = Integer.MAX_VALUE;
     }
 
+    @Override
     public boolean CanMatchAnyChar() {
         // Return true only if it is ~[]
         return negated_list && (descriptors == null || descriptors.size() == 0);

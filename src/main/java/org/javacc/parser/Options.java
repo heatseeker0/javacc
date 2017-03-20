@@ -151,7 +151,7 @@ public class Options {
     static final Set<OptionInfo> userOptions;
 
     static {
-        TreeSet<OptionInfo> temp = new TreeSet<OptionInfo>();
+        TreeSet<OptionInfo> temp = new TreeSet<>();
 
         temp.add(new OptionInfo(USEROPTION__PARSER_SUPER_CLASS, OptionType.STRING, null));
         temp.add(new OptionInfo(USEROPTION__TOKEN_MANAGER_SUPER_CLASS, OptionType.STRING, null));
@@ -229,9 +229,9 @@ public class Options {
      * Initialize for JavaCC
      */
     public static void init() {
-        optionValues = new HashMap<String, Object>();
-        cmdLineSetting = new HashSet<String>();
-        inputFileSetting = new HashSet<String>();
+        optionValues = new HashMap<>();
+        cmdLineSetting = new HashSet<>();
+        inputFileSetting = new HashSet<>();
 
         for (OptionInfo t : userOptions) {
             optionValues.put(t.getName(), t.getDefault());
@@ -271,7 +271,7 @@ public class Options {
     }
 
     public static Map<String, Object> getOptions() {
-        HashMap<String, Object> ret = new HashMap<String, Object>(optionValues);
+        HashMap<String, Object> ret = new HashMap<>(optionValues);
         return ret;
     }
 
@@ -870,9 +870,8 @@ public class Options {
     public static String getGrammarEncoding() {
         if (stringValue(USEROPTION__GRAMMAR_ENCODING).equals("")) {
             return System.getProperties().getProperty("file.encoding");
-        } else {
-            return stringValue(USEROPTION__GRAMMAR_ENCODING);
         }
+        return stringValue(USEROPTION__GRAMMAR_ENCODING);
     }
 
     /**
@@ -896,13 +895,13 @@ public class Options {
         }
     }
 
-    private static final Set<String> supportedJavaTemplateTypes = new HashSet<String>();
+    private static final Set<String> supportedJavaTemplateTypes = new HashSet<>();
     static {
         supportedJavaTemplateTypes.add(JAVA_TEMPLATE_TYPE_CLASSIC);
         supportedJavaTemplateTypes.add(JAVA_TEMPLATE_TYPE_MODERN);
     }
 
-    private static final Set<String> supportedLanguages = new HashSet<String>();
+    private static final Set<String> supportedLanguages = new HashSet<>();
     static {
         supportedLanguages.add(OUTPUT_LANGUAGE__JAVA);
         supportedLanguages.add(OUTPUT_LANGUAGE__CPP);
@@ -1005,9 +1004,8 @@ public class Options {
         String limit = stringValue(USEROPTION__CPP_STACK_LIMIT);
         if (limit.equals("0")) {
             return "";
-        } else {
-            return limit;
         }
+        return limit;
     }
 
     /**

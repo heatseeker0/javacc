@@ -29,7 +29,6 @@ package org.javacc.parser;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Describes JavaCC productions.
@@ -48,7 +47,7 @@ public class NormalProduction {
     /**
      * The NonTerminal nodes which refer to this production.
      */
-    private List parents = new ArrayList();
+    private List<Expansion> parents = new ArrayList<>();
 
     /**
      * The access modifier of this production.
@@ -63,19 +62,19 @@ public class NormalProduction {
     /**
      * The tokens that make up the return type of this production.
      */
-    private List<Token> return_type_tokens = new ArrayList<Token>();
+    private List<Token> return_type_tokens = new ArrayList<>();
 
     /**
      * The tokens that make up the parameters of this production.
      */
-    private List<Token> parameter_list_tokens = new ArrayList<Token>();
+    private List<Token> parameter_list_tokens = new ArrayList<>();
 
     /**
      * Each entry in this list is a list of tokens that represents an
      * exception in the throws list of this production. This list does not
      * include ParseException which is always thrown.
      */
-    private List throws_list = new ArrayList();
+    private List<Object> throws_list = new ArrayList<>();
 
     /**
      * The RHS of this production. Not used for JavaCodeProduction.
@@ -127,18 +126,6 @@ public class NormalProduction {
         return name.substring(name.lastIndexOf(".") + 1); // strip the package name
     }
 
-    public StringBuffer dump(int indent, Set alreadyDumped) {
-        StringBuffer sb = dumpPrefix(indent).append(System.identityHashCode(this)).append(' ').append(getSimpleName()).append(' ').append(getLhs());
-        if (!alreadyDumped.contains(this)) {
-            alreadyDumped.add(this);
-            if (getExpansion() != null) {
-                sb.append(eol).append(getExpansion().dump(indent + 1, alreadyDumped));
-            }
-        }
-
-        return sb;
-    }
-
     /**
      * @param line the line to set
      */
@@ -170,14 +157,14 @@ public class NormalProduction {
     /**
      * @param parents the parents to set
      */
-    void setParents(List parents) {
+    void setParents(List<Expansion> parents) {
         this.parents = parents;
     }
 
     /**
      * @return the parents
      */
-    List getParents() {
+    List<Expansion> getParents() {
         return parents;
     }
 
@@ -226,14 +213,14 @@ public class NormalProduction {
     /**
      * @param throws_list the throws_list to set
      */
-    public void setThrowsList(List throws_list) {
+    public void setThrowsList(List<Object> throws_list) {
         this.throws_list = throws_list;
     }
 
     /**
      * @return the throws_list
      */
-    public List getThrowsList() {
+    public List<Object> getThrowsList() {
         return throws_list;
     }
 

@@ -91,16 +91,16 @@ public class TokenMgrException extends RuntimeException {
     }
 
     /**
-     * Returns a detailed message for the Error when it is thrown by the
-     * token manager to indicate a lexical error.
-     * Parameters :
-     * EOFSeen : indicates if EOF caused the lexical error
-     * curLexState : lexical state in which this error occurred
-     * errorLine : line number when the error occurred
-     * errorColumn : column number when the error occurred
-     * errorAfter : prefix that was seen before this error occurred
-     * curchar : the offending character
-     * Note: You can customize the lexical error message by modifying this method.
+     * <p>Returns a detailed message for the Error when it is thrown by the token manager to indicate a lexical error.</p>
+     * 
+     * <strong>Note:</strong> You can customize the lexical error message by modifying this method.
+     * 
+     * @param EOFSeen Indicates if EOF caused the lexical error
+     * @param lexState Lexical state in which this error occurred
+     * @param errorLine Line number when the error occurred
+     * @param errorColumn Column number when the error occurred
+     * @param errorAfter Prefix that was seen before this error occurred
+     * @param curChar The offending character
      */
     protected static String LexicalError(boolean EOFSeen, int lexState, int errorLine, int errorColumn, String errorAfter, char curChar) {
         return ("Lexical error at line " + errorLine + ", column " + errorColumn + ".  Encountered: " + (EOFSeen ? "<EOF> " : ("\"" + addEscapes(String.valueOf(curChar)) + "\"") + " (" + (int) curChar + "), ") + "after : \"" + addEscapes(errorAfter) + "\"");
@@ -115,6 +115,7 @@ public class TokenMgrException extends RuntimeException {
      *
      * from this method for such cases in the release version of your parser.
      */
+    @Override
     public String getMessage() {
         return super.getMessage();
     }

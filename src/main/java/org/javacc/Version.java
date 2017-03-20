@@ -55,16 +55,19 @@ public class Version {
         String patch = "??";
 
         Properties props = new Properties();
-        InputStream is = Version.class.getResourceAsStream("/version.properties");
-        if (is != null) {
-            try {
-                props.load(is);
-            } catch (IOException e) {
-                System.err.println("Could not read version.properties: " + e);
+        try (InputStream is = Version.class.getResourceAsStream("/version.properties")) {
+            if (is != null) {
+                try {
+                    props.load(is);
+                } catch (IOException e) {
+                    System.err.println("Could not read version.properties: " + e);
+                }
+                major = props.getProperty("version.major", major);
+                minor = props.getProperty("version.minor", minor);
+                patch = props.getProperty("version.patch", patch);
             }
-            major = props.getProperty("version.major", major);
-            minor = props.getProperty("version.minor", minor);
-            patch = props.getProperty("version.patch", patch);
+        } catch (IOException e1) {
+            // Silent. Cannot happen.
         }
 
         majorVersion = major;

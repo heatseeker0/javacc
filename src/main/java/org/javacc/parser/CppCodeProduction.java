@@ -32,5 +32,5 @@ package org.javacc.parser;
  */
 
 public class CppCodeProduction extends CodeProduction {
-
+    //
 }

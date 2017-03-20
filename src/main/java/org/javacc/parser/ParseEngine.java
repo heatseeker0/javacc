@@ -30,14 +30,24 @@
  */
 package org.javacc.parser;
 
+import static org.javacc.parser.JavaCCGlobals.bnfproductions;
+import static org.javacc.parser.JavaCCGlobals.ccol;
+import static org.javacc.parser.JavaCCGlobals.cline;
+import static org.javacc.parser.JavaCCGlobals.cu_name;
+import static org.javacc.parser.JavaCCGlobals.jj2index;
+import static org.javacc.parser.JavaCCGlobals.lookaheadNeeded;
+import static org.javacc.parser.JavaCCGlobals.maskVals;
+import static org.javacc.parser.JavaCCGlobals.maskindex;
+import static org.javacc.parser.JavaCCGlobals.names_of_tokens;
+import static org.javacc.parser.JavaCCGlobals.production_table;
+import static org.javacc.parser.JavaCCGlobals.staticOpt;
+import static org.javacc.parser.JavaCCGlobals.tokenCount;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Stack;
-
-import static org.javacc.parser.JavaCCGlobals.*;
 
 public class ParseEngine {
 
@@ -90,9 +100,8 @@ public class ParseEngine {
             NormalProduction prod = ((NonTerminal) exp).getProd();
             if (prod instanceof CodeProduction) {
                 return true;
-            } else {
-                return javaCodeCheck(prod.getExpansion());
             }
+            return javaCodeCheck(prod.getExpansion());
         } else if (exp instanceof Choice) {
             Choice ch = (Choice) exp;
             for (int i = 0; i < ch.getChoices().size(); i++) {
@@ -104,7 +113,7 @@ public class ParseEngine {
         } else if (exp instanceof Sequence) {
             Sequence seq = (Sequence) exp;
             for (int i = 0; i < seq.units.size(); i++) {
-                Expansion[] units = (Expansion[]) seq.units.toArray(new Expansion[seq.units.size()]);
+                Expansion[] units = seq.units.toArray(new Expansion[seq.units.size()]);
                 if (units[i] instanceof Lookahead && ((Lookahead) units[i]).isExplicit()) {
                     // An explicit lookahead (rather than one generated implicitly). Assume
                     // the user knows what he / she is doing, e.g.
@@ -282,7 +291,7 @@ public class ParseEngine {
                             retval += "\n" + "if (";
                             indentAmt++;
                     }
-                    codeGenerator.printTokenSetup((Token) (la.getActionTokens().get(0)));
+                    codeGenerator.printTokenSetup((la.getActionTokens().get(0)));
                     for (Iterator it = la.getActionTokens().iterator(); it.hasNext();) {
                         t = (Token) it.next();
                         retval += codeGenerator.getStringToPrint(t);
@@ -341,7 +350,7 @@ public class ParseEngine {
                                 int j1 = i / 32;
                                 int j2 = i % 32;
                                 tokenMask[j1] |= 1 << j2;
-                                String s = (String) (names_of_tokens.get(new Integer(i)));
+                                String s = (names_of_tokens.get(new Integer(i)));
                                 if (s == null) {
                                     retval += i;
                                 } else {
@@ -398,7 +407,7 @@ public class ParseEngine {
                     // In addition, there is also a semantic lookahead. So concatenate
                     // the semantic check with the syntactic one.
                     retval += " && (";
-                    codeGenerator.printTokenSetup((Token) (la.getActionTokens().get(0)));
+                    codeGenerator.printTokenSetup((la.getActionTokens().get(0)));
                     for (Iterator it = la.getActionTokens().iterator(); it.hasNext();) {
                         t = (Token) it.next();
                         retval += codeGenerator.getStringToPrint(t);
@@ -490,7 +499,7 @@ public class ParseEngine {
         // if (t.kind == JavaCCParserConstants.STAR) ptr_ret = true;
 
         for (int i = 0; i < p.getReturnTypeTokens().size(); i++) {
-            t = (Token) (p.getReturnTypeTokens().get(i));
+            t = (p.getReturnTypeTokens().get(i));
             String s = codeGenerator.getStringToPrint(t);
             sig.append(t.toString());
             sig.append(" ");
@@ -508,7 +517,7 @@ public class ParseEngine {
         sig.setLength(0);
         sig.append("(");
         if (p.getParameterListTokens().size() != 0) {
-            codeGenerator.printTokenSetup((Token) (p.getParameterListTokens().get(0)));
+            codeGenerator.printTokenSetup((p.getParameterListTokens().get(0)));
             for (java.util.Iterator it = p.getParameterListTokens().iterator(); it.hasNext();) {
                 t = (Token) it.next();
                 sig.append(codeGenerator.getStringToPrint(t));
@@ -545,7 +554,7 @@ public class ParseEngine {
             ptr_ret = true;
 
         for (int i = 1; i < p.getReturnTypeTokens().size(); i++) {
-            t = (Token) (p.getReturnTypeTokens().get(i));
+            t = (p.getReturnTypeTokens().get(i));
             sig.append(codeGenerator.getStringToPrint(t));
             if (t.kind == JavaCCParserConstants.VOID)
                 void_ret = true;
@@ -559,7 +568,7 @@ public class ParseEngine {
         sig.setLength(0);
         sig.append("(");
         if (p.getParameterListTokens().size() != 0) {
-            codeGenerator.printTokenSetup((Token) (p.getParameterListTokens().get(0)));
+            codeGenerator.printTokenSetup((p.getParameterListTokens().get(0)));
             for (java.util.Iterator it = p.getParameterListTokens().iterator(); it.hasNext();) {
                 t = (Token) it.next();
                 sig.append(codeGenerator.getStringToPrint(t));
@@ -630,7 +639,7 @@ public class ParseEngine {
 
     void buildPhase1Routine(BNFProduction p) {
         Token t;
-        t = (Token) (p.getReturnTypeTokens().get(0));
+        t = (p.getReturnTypeTokens().get(0));
         boolean voidReturn = false;
         if (t.kind == JavaCCParserConstants.VOID) {
             voidReturn = true;
@@ -645,13 +654,13 @@ public class ParseEngine {
             ccol = t.beginColumn;
             codeGenerator.printTokenOnly(t);
             for (int i = 1; i < p.getReturnTypeTokens().size(); i++) {
-                t = (Token) (p.getReturnTypeTokens().get(i));
+                t = (p.getReturnTypeTokens().get(i));
                 codeGenerator.printToken(t);
             }
             codeGenerator.printTrailingComments(t);
             codeGenerator.genCode(" " + p.getLhs() + "(");
             if (p.getParameterListTokens().size() != 0) {
-                codeGenerator.printTokenSetup((Token) (p.getParameterListTokens().get(0)));
+                codeGenerator.printTokenSetup((p.getParameterListTokens().get(0)));
                 for (java.util.Iterator it = p.getParameterListTokens().iterator(); it.hasNext();) {
                     t = (Token) it.next();
                     codeGenerator.printToken(t);
@@ -693,7 +702,7 @@ public class ParseEngine {
         }
 
         if (!Options.booleanValue(Options.USEROPTION__CPP_IGNORE_ACTIONS) && p.getDeclarationTokens().size() != 0) {
-            codeGenerator.printTokenSetup((Token) (p.getDeclarationTokens().get(0)));
+            codeGenerator.printTokenSetup((p.getDeclarationTokens().get(0)));
             cline--;
             for (Iterator it = p.getDeclarationTokens().iterator(); it.hasNext();) {
                 t = (Token) it.next();
@@ -756,7 +765,7 @@ public class ParseEngine {
             RegularExpression e_nrw = (RegularExpression) e;
             retval += "\n";
             if (e_nrw.lhsTokens.size() != 0) {
-                codeGenerator.printTokenSetup((Token) (e_nrw.lhsTokens.get(0)));
+                codeGenerator.printTokenSetup((e_nrw.lhsTokens.get(0)));
                 for (java.util.Iterator it = e_nrw.lhsTokens.iterator(); it.hasNext();) {
                     t = (Token) it.next();
                     retval += codeGenerator.getStringToPrint(t);
@@ -784,7 +793,7 @@ public class ParseEngine {
             NonTerminal e_nrw = (NonTerminal) e;
             retval += "\n";
             if (e_nrw.getLhsTokens().size() != 0) {
-                codeGenerator.printTokenSetup((Token) (e_nrw.getLhsTokens().get(0)));
+                codeGenerator.printTokenSetup((e_nrw.getLhsTokens().get(0)));
                 for (java.util.Iterator it = e_nrw.getLhsTokens().iterator(); it.hasNext();) {
                     t = (Token) it.next();
                     retval += codeGenerator.getStringToPrint(t);
@@ -794,7 +803,7 @@ public class ParseEngine {
             }
             retval += e_nrw.getName() + "(";
             if (e_nrw.getArgumentTokens().size() != 0) {
-                codeGenerator.printTokenSetup((Token) (e_nrw.getArgumentTokens().get(0)));
+                codeGenerator.printTokenSetup((e_nrw.getArgumentTokens().get(0)));
                 for (java.util.Iterator it = e_nrw.getArgumentTokens().iterator(); it.hasNext();) {
                     t = (Token) it.next();
                     retval += codeGenerator.getStringToPrint(t);
@@ -809,7 +818,7 @@ public class ParseEngine {
             Action e_nrw = (Action) e;
             retval += "\u0003\n";
             if (!Options.booleanValue(Options.USEROPTION__CPP_IGNORE_ACTIONS) && e_nrw.getActionTokens().size() != 0) {
-                codeGenerator.printTokenSetup((Token) (e_nrw.getActionTokens().get(0)));
+                codeGenerator.printTokenSetup((e_nrw.getActionTokens().get(0)));
                 ccol = 1;
                 for (Iterator it = e_nrw.getActionTokens().iterator(); it.hasNext();) {
                     t = (Token) it.next();
@@ -948,7 +957,7 @@ public class ParseEngine {
             retval += "\u0002\n" + "}";
             for (int i = 0; i < e_nrw.catchblks.size(); i++) {
                 retval += " catch (";
-                list = (java.util.List) (e_nrw.types.get(i));
+                list = (e_nrw.types.get(i));
                 if (list.size() != 0) {
                     codeGenerator.printTokenSetup((Token) (list.get(0)));
                     for (java.util.Iterator it = list.iterator(); it.hasNext();) {
@@ -958,12 +967,12 @@ public class ParseEngine {
                     retval += codeGenerator.getTrailingComments(t);
                 }
                 retval += " ";
-                t = (Token) (e_nrw.ids.get(i));
+                t = (e_nrw.ids.get(i));
                 codeGenerator.printTokenSetup(t);
                 retval += codeGenerator.getStringToPrint(t);
                 retval += codeGenerator.getTrailingComments(t);
                 retval += ") {\u0003\n";
-                list = (java.util.List) (e_nrw.catchblks.get(i));
+                list = (e_nrw.catchblks.get(i));
                 if (list.size() != 0) {
                     codeGenerator.printTokenSetup((Token) (list.get(0)));
                     ccol = 1;
@@ -983,7 +992,7 @@ public class ParseEngine {
                 }
 
                 if (e_nrw.finallyblk.size() != 0) {
-                    codeGenerator.printTokenSetup((Token) (e_nrw.finallyblk.get(0)));
+                    codeGenerator.printTokenSetup((e_nrw.finallyblk.get(0)));
                     ccol = 1;
                     for (java.util.Iterator it = e_nrw.finallyblk.iterator(); it.hasNext();) {
                         t = (Token) it.next();
@@ -1054,7 +1063,7 @@ public class ParseEngine {
                     seq = (Expansion) ((Sequence) seq).units.get(1);
                 } else if (seq instanceof NonTerminal) {
                     NonTerminal e_nrw = (NonTerminal) seq;
-                    NormalProduction ntprod = (NormalProduction) (production_table.get(e_nrw.getName()));
+                    NormalProduction ntprod = (production_table.get(e_nrw.getName()));
                     if (ntprod instanceof CodeProduction) {
                         break; // nothing to do here
                     } else {
@@ -1096,7 +1105,7 @@ public class ParseEngine {
             // fact, we rely here on the fact that the "name" fields of both these
             // variables are the same.
             NonTerminal e_nrw = (NonTerminal) e;
-            NormalProduction ntprod = (NormalProduction) (production_table.get(e_nrw.getName()));
+            NormalProduction ntprod = (production_table.get(e_nrw.getName()));
             if (ntprod instanceof CodeProduction) {
                 ; // nothing to do here
             } else {
@@ -1199,7 +1208,7 @@ public class ParseEngine {
             // fact, we rely here on the fact that the "name" fields of both these
             // variables are the same.
             NonTerminal e_nrw = (NonTerminal) e;
-            NormalProduction ntprod = (NormalProduction) (production_table.get(e_nrw.getName()));
+            NormalProduction ntprod = (production_table.get(e_nrw.getName()));
             if (ntprod instanceof CodeProduction) {
                 codeGenerator.genCodeLine("    if (true) { jj_la = 0; jj_scanpos = jj_lastpos; " + genReturn(false) + "}");
             } else {
@@ -1226,7 +1235,7 @@ public class ParseEngine {
                     lookaheadNeeded = true;
                     codeGenerator.genCodeLine("    jj_lookingAhead = true;");
                     codeGenerator.genCode("    jj_semLA = ");
-                    codeGenerator.printTokenSetup((Token) (la.getActionTokens().get(0)));
+                    codeGenerator.printTokenSetup((la.getActionTokens().get(0)));
                     for (Iterator it = la.getActionTokens().iterator(); it.hasNext();) {
                         t = (Token) it.next();
                         codeGenerator.printToken(t);
@@ -1342,7 +1351,7 @@ public class ParseEngine {
             retval = 1;
         } else if (e instanceof NonTerminal) {
             NonTerminal e_nrw = (NonTerminal) e;
-            NormalProduction ntprod = (NormalProduction) (production_table.get(e_nrw.getName()));
+            NormalProduction ntprod = (production_table.get(e_nrw.getName()));
             if (ntprod instanceof CodeProduction) {
                 retval = Integer.MAX_VALUE;
                 // Make caller think this is unending (for we do not go beyond JAVACODE during
@@ -1450,7 +1459,7 @@ public class ParseEngine {
                     codeGenerator.genCodeLine("    try {");
                 }
                 if (cp.getCodeTokens().size() != 0) {
-                    codeGenerator.printTokenSetup((Token) (cp.getCodeTokens().get(0)));
+                    codeGenerator.printTokenSetup((cp.getCodeTokens().get(0)));
                     cline--;
                     codeGenerator.printTokenList(cp.getCodeTokens());
                 }
@@ -1462,7 +1471,7 @@ public class ParseEngine {
                 codeGenerator.genCodeLine("");
             } else if (p instanceof JavaCodeProduction) {
                 jp = (JavaCodeProduction) p;
-                t = (Token) (jp.getReturnTypeTokens().get(0));
+                t = (jp.getReturnTypeTokens().get(0));
                 codeGenerator.printTokenSetup(t);
                 ccol = 1;
                 codeGenerator.printLeadingComments(t);
@@ -1471,13 +1480,13 @@ public class ParseEngine {
                 ccol = t.beginColumn;
                 codeGenerator.printTokenOnly(t);
                 for (int i = 1; i < jp.getReturnTypeTokens().size(); i++) {
-                    t = (Token) (jp.getReturnTypeTokens().get(i));
+                    t = (jp.getReturnTypeTokens().get(i));
                     codeGenerator.printToken(t);
                 }
                 codeGenerator.printTrailingComments(t);
                 codeGenerator.genCode(" " + jp.getLhs() + "(");
                 if (jp.getParameterListTokens().size() != 0) {
-                    codeGenerator.printTokenSetup((Token) (jp.getParameterListTokens().get(0)));
+                    codeGenerator.printTokenSetup((jp.getParameterListTokens().get(0)));
                     for (java.util.Iterator it = jp.getParameterListTokens().iterator(); it.hasNext();) {
                         t = (Token) it.next();
                         codeGenerator.printToken(t);
@@ -1503,7 +1512,7 @@ public class ParseEngine {
                     codeGenerator.genCode("    try {");
                 }
                 if (jp.getCodeTokens().size() != 0) {
-                    codeGenerator.printTokenSetup((Token) (jp.getCodeTokens().get(0)));
+                    codeGenerator.printTokenSetup((jp.getCodeTokens().get(0)));
                     cline--;
                     codeGenerator.printTokenList(jp.getCodeTokens());
                 }
@@ -1567,7 +1576,7 @@ public class ParseEngine {
             System.err.println("TOKEN, " + e_nrw.ordinal);
         } else if (e instanceof NonTerminal) {
             NonTerminal e_nrw = (NonTerminal) e;
-            NormalProduction ntprod = (NormalProduction) (production_table.get(e_nrw.getName()));
+            NormalProduction ntprod = (production_table.get(e_nrw.getName()));
             if (ntprod instanceof CodeProduction) {
                 // javacode, true - always (warn?)
                 System.err.println("JAVACODE_PROD, true");
@@ -1609,7 +1618,7 @@ public class ParseEngine {
             } else {
                 Expansion tmp = (Expansion) e_nrw.units.get(1);
                 while (tmp instanceof NonTerminal) {
-                    NormalProduction ntprod = (NormalProduction) (production_table.get(((NonTerminal) tmp).getName()));
+                    NormalProduction ntprod = (production_table.get(((NonTerminal) tmp).getName()));
                     if (ntprod instanceof CodeProduction)
                         break;
                     tmp = ntprod.getExpansion();

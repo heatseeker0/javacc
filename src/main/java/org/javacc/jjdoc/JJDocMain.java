@@ -109,9 +109,8 @@ public final class JJDocMain extends JJDocGlobals {
         if (args.length == 0) {
             help_message();
             return 1;
-        } else {
-            info("(type \"jjdoc\" with no arguments for help)");
         }
+        info("(type \"jjdoc\" with no arguments for help)");
 
         if (JJDocOptions.isOption(args[args.length - 1])) {
             error("Last argument \"" + args[args.length - 1] + "\" is not a filename or \"-\".  ");
@@ -164,10 +163,9 @@ public final class JJDocMain extends JJDocGlobals {
                     info("Grammar documentation generated with 0 errors and " + JavaCCErrors.get_warning_count() + " warnings.");
                 }
                 return 0;
-            } else {
-                error("Detected " + JavaCCErrors.get_error_count() + " errors and " + JavaCCErrors.get_warning_count() + " warnings.");
-                return (JavaCCErrors.get_error_count() == 0) ? 0 : 1;
             }
+            error("Detected " + JavaCCErrors.get_error_count() + " errors and " + JavaCCErrors.get_warning_count() + " warnings.");
+            return (JavaCCErrors.get_error_count() == 0) ? 0 : 1;
         } catch (org.javacc.parser.MetaParseException e) {
             error(e.toString());
             error("Detected " + JavaCCErrors.get_error_count() + " errors and " + JavaCCErrors.get_warning_count() + " warnings.");

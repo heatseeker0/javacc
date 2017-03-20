@@ -43,8 +43,8 @@ import org.javacc.parser.TokenProduction;
 /**
  * Output BNF in HTML 3.2 format.
  */
-public class XTextGenerator extends TextGenerator implements Generator {
-    private Hashtable id_map = new Hashtable();
+public class XTextGenerator extends TextGenerator {
+    private Hashtable<String, String> id_map = new Hashtable<>();
     private int id = 1;
 
     static final String sep = "\n";
@@ -58,8 +58,8 @@ public class XTextGenerator extends TextGenerator implements Generator {
 
         StringBuilder sb = new StringBuilder();
 
-        for (Iterator it2 = tp.respecs.iterator(); it2.hasNext();) {
-            RegExprSpec res = (RegExprSpec) it2.next();
+        for (Iterator<RegExprSpec> it2 = tp.respecs.iterator(); it2.hasNext();) {
+            RegExprSpec res = it2.next();
 
             String regularExpressionText = JJDoc.emitRE(res.rexp);
             sb.append(regularExpressionText);
@@ -78,7 +78,7 @@ public class XTextGenerator extends TextGenerator implements Generator {
     }
 
     protected String get_id(String nt) {
-        String i = (String) id_map.get(nt);
+        String i = id_map.get(nt);
         if (i == null) {
             i = "prod" + id++;
             id_map.put(nt, i);
@@ -90,6 +90,7 @@ public class XTextGenerator extends TextGenerator implements Generator {
         print(s + "\n");
     }
 
+    @Override
     public void text(String s) {
         // String ss = "";
         // for (int i = 0; i < s.length(); ++i) {
@@ -106,10 +107,12 @@ public class XTextGenerator extends TextGenerator implements Generator {
         print(s);
     }
 
+    @Override
     public void print(String s) {
         ostr.print(s);
     }
 
+    @Override
     public void documentStart() {
         ostr = create_output_stream();
         println("grammar " + JJDocGlobals.input_file + " with org.eclipse.xtext.common.Terminals");
@@ -132,6 +135,7 @@ public class XTextGenerator extends TextGenerator implements Generator {
         // println("<H1 ALIGN=CENTER>BNF for " + JJDocGlobals.input_file + "</H1>");
     }
 
+    @Override
     public void documentEnd() {
         // println("</BODY>");
         // println("</HTML>");
@@ -143,6 +147,7 @@ public class XTextGenerator extends TextGenerator implements Generator {
      * 
      * @see org.javacc.jjdoc.TextGenerator#specialTokens(java.lang.String)
      */
+    @Override
     public void specialTokens(String s) {
         // println(" <!-- Special token -->");
         // println(" <TR>");
@@ -154,6 +159,7 @@ public class XTextGenerator extends TextGenerator implements Generator {
         // println(" </TR>");
     }
 
+    @Override
     public void nonterminalsStart() {
         // println("<H2 ALIGN=CENTER>NON-TERMINALS</H2>");
         // if (JJDocOptions.getOneTable()) {
@@ -161,33 +167,39 @@ public class XTextGenerator extends TextGenerator implements Generator {
         // }
     }
 
+    @Override
     public void nonterminalsEnd() {
         // if (JJDocOptions.getOneTable()) {
         // println("</TABLE>");
         // }
     }
 
+    @Override
     public void tokensStart() {
         // println("<H2 ALIGN=CENTER>TOKENS</H2>");
         // println("<TABLE>");
     }
 
+    @Override
     public void tokensEnd() {
         // println("</TABLE>");
     }
 
+    @Override
     public void javacode(JavaCodeProduction jp) {
         // productionStart(jp);
         // println("<I>java code</I></TD></TR>");
         // productionEnd(jp);
     }
 
+    @Override
     public void cppcode(CppCodeProduction cp) {
         // productionStart(cp);
         // println("<I>c++ code</I></TD></TR>");
         // productionEnd(cp);
     }
 
+    @Override
     public void productionStart(NormalProduction np) {
         // if (!JJDocOptions.getOneTable()) {
         // println("");
@@ -200,6 +212,7 @@ public class XTextGenerator extends TextGenerator implements Generator {
         // print("<TD ALIGN=LEFT VALIGN=BASELINE>");
     }
 
+    @Override
     public void productionEnd(NormalProduction np) {
         // if (!JJDocOptions.getOneTable()) {
         // println("</TABLE>");
@@ -207,6 +220,7 @@ public class XTextGenerator extends TextGenerator implements Generator {
         // }
     }
 
+    @Override
     public void expansionStart(Expansion e, boolean first) {
         //
         //
@@ -219,22 +233,29 @@ public class XTextGenerator extends TextGenerator implements Generator {
         // }
     }
 
+    @Override
     public void expansionEnd(Expansion e, boolean first) {
         println(";");
     }
 
+    @Override
     public void nonTerminalStart(NonTerminal nt) {
         print("terminal ");
     }
 
+    @Override
     public void nonTerminalEnd(NonTerminal nt) {
         print(";");
     }
 
+    @Override
     public void reStart(RegularExpression r) {
+        //
     }
 
+    @Override
     public void reEnd(RegularExpression r) {
+        //
     }
 
 }

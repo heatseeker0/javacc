@@ -41,22 +41,23 @@ public class RChoice extends RegularExpression {
      * The list of choices of this regular expression. Each
      * list component will narrow to RegularExpression.
      */
-    private List choices = new ArrayList();
+    private List<Object> choices = new ArrayList<>();
 
     /**
      * @param choices the choices to set
      */
-    public void setChoices(List choices) {
+    public void setChoices(List<Object> choices) {
         this.choices = choices;
     }
 
     /**
      * @return the choices
      */
-    public List getChoices() {
+    public List<Object> getChoices() {
         return choices;
     }
 
+    @Override
     public Nfa GenerateNfa(boolean ignoreCase) {
         CompressCharLists();
 
@@ -98,7 +99,7 @@ public class RChoice extends RegularExpression {
                 if (((RCharacterList) curRE).negated_list)
                     ((RCharacterList) curRE).RemoveNegation();
 
-                List tmp = ((RCharacterList) curRE).descriptors;
+                List<?> tmp = ((RCharacterList) curRE).descriptors;
 
                 if (curCharList == null)
                     getChoices().set(i, curRE = curCharList = new RCharacterList());
@@ -136,7 +137,7 @@ public class RChoice extends RegularExpression {
         for (int i = 0; i < getChoices().size(); i++) {
             if (!(curRE = (RegularExpression) getChoices().get(i)).private_rexp &&
             // curRE instanceof RJustName &&
-            curRE.ordinal > 0 && curRE.ordinal < ordinal && Main.lg.lexStates[curRE.ordinal] == Main.lg.lexStates[ordinal]) {
+            curRE.ordinal > 0 && curRE.ordinal < ordinal && LexGen.lexStates[curRE.ordinal] == LexGen.lexStates[ordinal]) {
                 if (label != null)
                     JavaCCErrors.warning(this, "Regular Expression choice : " + curRE.label + " can never be matched as : " + label);
                 else

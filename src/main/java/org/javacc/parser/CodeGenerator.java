@@ -3,12 +3,21 @@
 
 package org.javacc.parser;
 
-import static org.javacc.parser.JavaCCGlobals.*;
+import static org.javacc.parser.JavaCCGlobals.addUnicodeEscapes;
+import static org.javacc.parser.JavaCCGlobals.cu_name;
+import static org.javacc.parser.JavaCCGlobals.jjtreeGenerated;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.javacc.utils.OutputFileGenerator;
-
-import java.io.*;
-import java.util.*;
 
 public class CodeGenerator {
     protected StringBuffer mainBuffer = new StringBuffer();
@@ -35,7 +44,7 @@ public class CodeGenerator {
         // String literals in CPP become char arrays
         outputBuffer.append("{");
         for (int i = 0; i < s.length(); i++) {
-            outputBuffer.append("0x" + Integer.toHexString((int) s.charAt(i)) + ", ");
+            outputBuffer.append("0x" + Integer.toHexString(s.charAt(i)) + ", ");
         }
         outputBuffer.append("0}");
     }
@@ -88,7 +97,6 @@ public class CodeGenerator {
     // HACK
     private void fixupLongLiterals(StringBuffer sb) {
         for (int i = 0; i < sb.length() - 1; i++) {
-            int beg = i;
             char c1 = sb.charAt(i);
             char c2 = sb.charAt(i + 1);
             if (Character.isDigit(c1) || (c1 == '0' && c2 == 'x')) {
@@ -104,21 +112,14 @@ public class CodeGenerator {
     }
 
     public void saveOutput(String fileName, StringBuffer sb) {
-        PrintWriter fw = null;
         if (!isJavaLanguage()) {
             fixupLongLiterals(sb);
         }
-        try {
-            File tmp = new File(fileName);
-            fw = new PrintWriter(new BufferedWriter(new FileWriter(tmp), 8092));
-
+        File tmp = new File(fileName);
+        try (PrintWriter fw = new PrintWriter(new BufferedWriter(new FileWriter(tmp), 8092))) {
             fw.print(sb.toString());
         } catch (IOException ioe) {
             JavaCCErrors.fatal("Could not create output file: " + fileName);
-        } finally {
-            if (fw != null) {
-                fw.close();
-            }
         }
     }
 
@@ -138,7 +139,7 @@ public class CodeGenerator {
     protected void printTokenList(List<Token> list) {
         Token t = null;
         for (Iterator<Token> it = list.iterator(); it.hasNext();) {
-            t = (Token) it.next();
+            t = it.next();
             printToken(t);
         }
 
@@ -346,16 +347,16 @@ public class CodeGenerator {
             includeBuffer.append(";\n");
 
             String modsAndRetType = null;
-            int i = qualifiedModsAndRetType.lastIndexOf(':');
-            if (i >= 0)
-                modsAndRetType = qualifiedModsAndRetType.substring(i + 1);
-
-            if (modsAndRetType != null) {
-                i = modsAndRetType.lastIndexOf("virtual");
-                if (i >= 0)
-                    modsAndRetType = modsAndRetType.substring(i + "virtual".length());
-            }
             if (qualifiedModsAndRetType != null) {
+                int i = qualifiedModsAndRetType.lastIndexOf(':');
+                if (i >= 0)
+                    modsAndRetType = qualifiedModsAndRetType.substring(i + 1);
+
+                if (modsAndRetType != null) {
+                    i = modsAndRetType.lastIndexOf("virtual");
+                    if (i >= 0)
+                        modsAndRetType = modsAndRetType.substring(i + "virtual".length());
+                }
                 i = qualifiedModsAndRetType.lastIndexOf("virtual");
                 if (i >= 0)
                     qualifiedModsAndRetType = qualifiedModsAndRetType.substring(i + "virtual".length());
@@ -374,9 +375,8 @@ public class CodeGenerator {
     public static String getCharStreamName() {
         if (Options.getUserCharStream()) {
             return "CharStream";
-        } else {
-            return Options.getJavaUnicodeEscape() ? "JavaCharStream" : "SimpleCharStream";
         }
+        return Options.getJavaUnicodeEscape() ? "JavaCharStream" : "SimpleCharStream";
     }
 
     @SuppressWarnings("unchecked")
@@ -399,9 +399,9 @@ public class CodeGenerator {
         }
 
         OutputFileGenerator gen = new OutputFileGenerator(name, options);
-        StringWriter sw = new StringWriter();
-        gen.generate(new PrintWriter(sw));
-        sw.close();
-        genCode(sw.toString());
+        try (StringWriter sw = new StringWriter()) {
+            gen.generate(new PrintWriter(sw));
+            genCode(sw.toString());
+        }
     }
 }

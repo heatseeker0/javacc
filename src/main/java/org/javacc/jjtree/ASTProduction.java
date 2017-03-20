@@ -36,13 +36,13 @@ public class ASTProduction extends JJTreeNode {
     }
 
     String name;
-    Vector throws_list = new Vector();
+    Vector<String> throws_list = new Vector<>();
 
-    private Hashtable scopes = new Hashtable();
+    private Hashtable<NodeScope, Integer> scopes = new Hashtable<>();
     private int nextNodeScopeNumber = 0;
 
     int getNodeScopeNumber(NodeScope s) {
-        Integer i = (Integer) scopes.get(s);
+        Integer i = scopes.get(s);
         if (i == null) {
             i = new Integer(nextNodeScopeNumber++);
             scopes.put(s, i);
@@ -51,6 +51,7 @@ public class ASTProduction extends JJTreeNode {
     }
 
     /** Accept the visitor. **/
+    @Override
     public Object jjtAccept(JJTreeParserVisitor visitor, Object data) {
         return visitor.visit(this, data);
     }

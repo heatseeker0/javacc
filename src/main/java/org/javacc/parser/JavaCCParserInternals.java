@@ -28,8 +28,8 @@
 
 package org.javacc.parser;
 
-import java.util.List;
 import java.util.Hashtable;
+import java.util.List;
 
 /**
  * Utilities.
@@ -40,7 +40,7 @@ public abstract class JavaCCParserInternals extends JavaCCGlobals {
         Integer i = new Integer(0);
         lexstate_S2I.put("DEFAULT", i);
         lexstate_I2S.put(i, "DEFAULT");
-        simple_tokens_table.put("DEFAULT", new Hashtable());
+        simple_tokens_table.put("DEFAULT", new Hashtable<>());
     }
 
     static protected void addcuname(String id) {
@@ -123,12 +123,12 @@ public abstract class JavaCCParserInternals extends JavaCCGlobals {
                 ii = new Integer(nextFreeLexState++);
                 lexstate_S2I.put(p.lexStates[i], ii);
                 lexstate_I2S.put(ii, p.lexStates[i]);
-                simple_tokens_table.put(p.lexStates[i], new Hashtable());
+                simple_tokens_table.put(p.lexStates[i], new Hashtable<>());
             }
         }
     }
 
-    static protected void add_token_manager_decls(Token t, List decls) {
+    static protected void add_token_manager_decls(Token t, List<Token> decls) {
         if (token_mgr_decls != null) {
             JavaCCErrors.parse_error(t, "Multiple occurrence of \"TOKEN_MGR_DECLS\".");
         } else {
@@ -168,10 +168,10 @@ public abstract class JavaCCParserInternals extends JavaCCGlobals {
 
     static protected int hexval(char ch) {
         if (ch >= '0' && ch <= '9')
-            return ((int) ch) - ((int) '0');
+            return ch - '0';
         if (ch >= 'A' && ch <= 'F')
-            return ((int) ch) - ((int) 'A') + 10;
-        return ((int) ch) - ((int) 'a') + 10;
+            return ch - 'A' + 10;
+        return ch - 'a' + 10;
     }
 
     static protected String remove_escapes_and_quotes(Token t, String str) {
@@ -228,15 +228,15 @@ public abstract class JavaCCParserInternals extends JavaCCGlobals {
                 continue;
             }
             if (ch >= '0' && ch <= '7') {
-                ordinal = ((int) ch) - ((int) '0');
+                ordinal = ch - '0';
                 index++;
                 ch1 = str.charAt(index);
                 if (ch1 >= '0' && ch1 <= '7') {
-                    ordinal = ordinal * 8 + ((int) ch1) - ((int) '0');
+                    ordinal = ordinal * 8 + ch1 - '0';
                     index++;
                     ch1 = str.charAt(index);
                     if (ch <= '3' && ch1 >= '0' && ch1 <= '7') {
-                        ordinal = ordinal * 8 + ((int) ch1) - ((int) '0');
+                        ordinal = ordinal * 8 + ch1 - '0';
                         index++;
                     }
                 }
@@ -279,16 +279,15 @@ public abstract class JavaCCParserInternals extends JavaCCGlobals {
         if (s.length() != 1) {
             JavaCCErrors.parse_error(t, "String in character list may contain only one character.");
             return ' ';
-        } else {
-            return s.charAt(0);
         }
+        return s.charAt(0);
     }
 
     static protected char character_descriptor_assign(Token t, String s, String left) {
         if (s.length() != 1) {
             JavaCCErrors.parse_error(t, "String in character list may contain only one character.");
             return ' ';
-        } else if ((int) (left.charAt(0)) > (int) (s.charAt(0))) {
+        } else if ((left.charAt(0)) > (s.charAt(0))) {
             JavaCCErrors.parse_error(t, "Right end of character range \'" + s + "\' has a lower ordinal value than the left end of character range \'" + left + "\'.");
             return left.charAt(0);
         } else {
@@ -296,7 +295,7 @@ public abstract class JavaCCParserInternals extends JavaCCGlobals {
         }
     }
 
-    static protected void makeTryBlock(Token tryLoc, Container result, Container nestedExp, List types, List ids, List catchblks, List finallyblk) {
+    static protected void makeTryBlock(Token tryLoc, Container result, Container nestedExp, List<List<Token>> types, List<Token> ids, List<List<Token>> catchblks, List<Token> finallyblk) {
         if (catchblks.size() == 0 && finallyblk == null) {
             JavaCCErrors.parse_error(tryLoc, "Try block must contain at least one catch or finally block.");
             return;

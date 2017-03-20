@@ -35,6 +35,7 @@ public class ASTOptionBinding extends JJTreeNode {
     private boolean suppressed = false;
     private String name;
 
+    @SuppressWarnings("unused")
     void initialize(String n, String v) {
         name = n;
 
@@ -54,15 +55,16 @@ public class ASTOptionBinding extends JJTreeNode {
         suppressed = s;
     }
 
+    @Override
     String translateImage(Token t) {
         if (suppressed) {
             return whiteOut(t);
-        } else {
-            return t.image;
         }
+        return t.image;
     }
 
     /** Accept the visitor. **/
+    @Override
     public Object jjtAccept(JJTreeParserVisitor visitor, Object data) {
         return visitor.visit(this, data);
     }

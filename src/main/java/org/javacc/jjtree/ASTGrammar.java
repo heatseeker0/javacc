@@ -31,7 +31,6 @@
 
 package org.javacc.jjtree;
 
-import org.javacc.parser.JavaCCGlobals;
 import org.javacc.parser.Options;
 
 public class ASTGrammar extends JJTreeNode {
@@ -54,6 +53,7 @@ public class ASTGrammar extends JJTreeNode {
     }
 
     /** Accept the visitor. **/
+    @Override
     public Object jjtAccept(JJTreeParserVisitor visitor, Object data) {
         return visitor.visit(this, data);
     }

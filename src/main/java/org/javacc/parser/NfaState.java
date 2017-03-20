@@ -31,7 +31,6 @@
 package org.javacc.parser;
 
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -57,16 +56,16 @@ public class NfaState {
     private static boolean mark[];
     private static boolean stateDone[];
 
-    private static List<NfaState> allStates = new ArrayList<NfaState>();
-    private static List<NfaState> indexedAllStates = new ArrayList<NfaState>();
-    private static List<NfaState> nonAsciiTableForMethod = new ArrayList<NfaState>();
-    private static Hashtable equivStatesTable = new Hashtable();
-    private static Hashtable allNextStates = new Hashtable();
-    private static Hashtable lohiByteTab = new Hashtable();
-    private static Hashtable stateNameForComposite = new Hashtable();
-    private static Hashtable compositeStateTable = new Hashtable();
-    private static Hashtable stateBlockTable = new Hashtable();
-    private static Hashtable stateSetsToFix = new Hashtable();
+    private static List<NfaState> allStates = new ArrayList<>();
+    private static List<NfaState> indexedAllStates = new ArrayList<>();
+    private static List<NfaState> nonAsciiTableForMethod = new ArrayList<>();
+    private static Hashtable equivStatesTable = new Hashtable<>();
+    private static Hashtable allNextStates = new Hashtable<>();
+    private static Hashtable lohiByteTab = new Hashtable<>();
+    private static Hashtable stateNameForComposite = new Hashtable<>();
+    private static Hashtable compositeStateTable = new Hashtable<>();
+    private static Hashtable stateBlockTable = new Hashtable<>();
+    private static Hashtable stateSetsToFix = new Hashtable<>();
 
     private static boolean jjCheckNAddStatesUnaryNeeded = false;
     private static boolean jjCheckNAddStatesDualNeeded = false;
@@ -94,7 +93,7 @@ public class NfaState {
     private char[] rangeMoves = null;
     NfaState next = null;
     private NfaState stateForCase;
-    Vector<NfaState> epsilonMoves = new Vector<NfaState>();
+    Vector<NfaState> epsilonMoves = new Vector<>();
     private String epsilonMovesString;
     private NfaState[] epsilonMoveArray;
 
@@ -1504,7 +1503,7 @@ public class NfaState {
             original.removeElement(tmp);
 
             long bitVec = tmp.asciiMoves[byteNum];
-            List<NfaState> subSet = new ArrayList<NfaState>();
+            List<NfaState> subSet = new ArrayList<>();
             subSet.add(tmp);
 
             for (int j = 0; j < original.size(); j++) {
@@ -2812,15 +2811,15 @@ public class NfaState {
         statesForState = null;
     }
 
-    private static final Map<Integer, NfaState> initialStates = new HashMap<Integer, NfaState>();
-    private static final Map<Integer, List<NfaState>> statesForLexicalState = new HashMap<Integer, List<NfaState>>();
-    private static final Map<Integer, Integer> nfaStateOffset = new HashMap<Integer, Integer>();
-    private static final Map<Integer, Integer> matchAnyChar = new HashMap<Integer, Integer>();
+    private static final Map<Integer, NfaState> initialStates = new HashMap<>();
+    private static final Map<Integer, List<NfaState>> statesForLexicalState = new HashMap<>();
+    private static final Map<Integer, Integer> nfaStateOffset = new HashMap<>();
+    private static final Map<Integer, Integer> matchAnyChar = new HashMap<>();
 
     static void UpdateNfaData(int maxState, int startStateName, int lexicalStateIndex, int matchAnyCharKind) {
         // Cleanup the state set.
-        final Set<Integer> done = new HashSet<Integer>();
-        List<NfaState> cleanStates = new ArrayList<NfaState>();
+        final Set<Integer> done = new HashSet<>();
+        List<NfaState> cleanStates = new ArrayList<>();
         NfaState startState = null;
         for (int i = 0; i < allStates.size(); i++) {
             NfaState tmp = (NfaState) allStates.get(i);
@@ -2847,7 +2846,7 @@ public class NfaState {
 
     public static void BuildTokenizerData(TokenizerData tokenizerData) {
         NfaState[] cleanStates;
-        List<NfaState> cleanStateList = new ArrayList<NfaState>();
+        List<NfaState> cleanStateList = new ArrayList<>();
         for (int l : statesForLexicalState.keySet()) {
             int offset = nfaStateOffset.get(l);
             List<NfaState> states = statesForLexicalState.get(l);
@@ -2863,26 +2862,26 @@ public class NfaState {
         for (NfaState s : cleanStateList) {
             assert (cleanStates[s.stateName] == null);
             cleanStates[s.stateName] = s;
-            Set<Character> chars = new TreeSet<Character>();
+            Set<Character> chars = new TreeSet<>();
             for (int c = 0; c <= Character.MAX_VALUE; c++) {
                 if (s.CanMoveUsingChar((char) c)) {
                     chars.add((char) c);
                 }
             }
-            Set<Integer> nextStates = new TreeSet<Integer>();
+            Set<Integer> nextStates = new TreeSet<>();
             if (s.next != null) {
                 for (NfaState next : s.next.epsilonMoveArray) {
                     nextStates.add(next.stateName);
                 }
             }
-            Set<Integer> composite = new TreeSet<Integer>();
+            Set<Integer> composite = new TreeSet<>();
             if (s.isComposite) {
                 for (int c : s.compositeStates)
                     composite.add(c);
             }
             tokenizerData.addNfaState(s.stateName, chars, nextStates, composite, s.kindToPrint);
         }
-        Map<Integer, Integer> initStates = new HashMap<Integer, Integer>();
+        Map<Integer, Integer> initStates = new HashMap<>();
         for (int l : initialStates.keySet()) {
             if (initialStates.get(l) == null) {
                 initStates.put(l, -1);

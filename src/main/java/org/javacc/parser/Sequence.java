@@ -44,7 +44,7 @@ public class Sequence extends Expansion {
      * The list of units in this expansion sequence. Each
      * List component will narrow to Expansion.
      */
-    public List<? super Object> units = new ArrayList<Object>();
+    public List<? super Object> units = new ArrayList<>();
 
     public Sequence() {
     }
@@ -55,6 +55,7 @@ public class Sequence extends Expansion {
         this.units.add(lookahead);
     }
 
+    @Override
     public StringBuffer dump(int indent, Set<? super Expansion> alreadyDumped) {
         if (alreadyDumped.contains(this)) {
             return super.dump(0, alreadyDumped).insert(0, '[').append(']').insert(0, dumpPrefix(indent));

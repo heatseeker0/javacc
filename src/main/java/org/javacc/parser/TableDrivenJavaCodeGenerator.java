@@ -52,7 +52,7 @@ public class TableDrivenJavaCodeGenerator implements TokenManagerCodeGenerator {
     }
 
     private void dumpDfaTables(CodeGenerator codeGenerator, TokenizerData tokenizerData) {
-        Map<Integer, int[]> startAndSize = new HashMap<Integer, int[]>();
+        Map<Integer, int[]> startAndSize = new HashMap<>();
         int i = 0;
 
         codeGenerator.genCodeLine("private static final int[] stringLiterals = {");
@@ -256,9 +256,9 @@ public class TableDrivenJavaCodeGenerator implements TokenManagerCodeGenerator {
                 codeGenerator.genCode("\"");
                 for (int j = 0; j < image.length(); j++) {
                     if (image.charAt(j) <= 0xff) {
-                        codeGenerator.genCode("\\" + Integer.toOctalString((int) image.charAt(j)));
+                        codeGenerator.genCode("\\" + Integer.toOctalString(image.charAt(j)));
                     } else {
-                        String hexVal = Integer.toHexString((int) image.charAt(j));
+                        String hexVal = Integer.toHexString(image.charAt(j));
                         if (hexVal.length() == 3)
                             hexVal = "0" + hexVal;
                         codeGenerator.genCode("\\u" + hexVal);

@@ -41,8 +41,9 @@ public class RSequence extends RegularExpression {
      * The list of units in this regular expression sequence. Each
      * list component will narrow to RegularExpression.
      */
-    public List<? super Object> units = new ArrayList<Object>();
+    public List<? super Object> units = new ArrayList<>();
 
+    @Override
     public Nfa GenerateNfa(boolean ignoreCase) {
         if (units.size() == 1)
             return ((RegularExpression) units.get(0)).GenerateNfa(ignoreCase);
@@ -67,7 +68,9 @@ public class RSequence extends RegularExpression {
             temp1 = temp2;
         }
 
-        temp2.end.AddMove(finalState);
+        if (temp2 != null) {
+            temp2.end.AddMove(finalState);
+        }
 
         return retVal;
     }

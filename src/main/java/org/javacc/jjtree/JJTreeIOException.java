@@ -31,6 +31,7 @@ package org.javacc.jjtree;
  * Thrown when ther is a problem reading or writing to the file system.
  */
 class JJTreeIOException extends java.io.IOException {
+    private static final long serialVersionUID = 1L;
 
     JJTreeIOException(String detail) {
         super(detail);
